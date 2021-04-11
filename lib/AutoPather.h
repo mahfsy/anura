@@ -16,7 +16,7 @@ typedef struct {
 } AutoPather;
 
 void AutoPather_init(AutoPather* a);
-void AutoPather_gen_path(AutoPather* a, Map* m, Vec2 start, Vec2 end);
+void AutoPather_gen_path(AutoPather* a, const Map* m, Vec2 start, Vec2 end);
 
 void AutoPather_update(AutoPather* a, Entity* e, float delta);
 

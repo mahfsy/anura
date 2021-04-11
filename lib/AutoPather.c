@@ -1,5 +1,6 @@
 #include "AutoPather.h"
 
+#include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
 
@@ -22,10 +23,83 @@ static void straight_path(AutoPather* a, Vec2 start, Vec2 end) {
     a->path.points[0] = end;
 }
 
-void AutoPather_gen_path(AutoPather* a, Map* m, Vec2 start, Vec2 end) {
-    (void)(m);
-    straight_path(a, start, end);
-    //the hard part
+void AutoPather_gen_path(AutoPather* a, const Map* m, Vec2 start_loc, Vec2 end_loc) {
+    //straight_path(a, start_loc, end_loc);
+    
+    int start = Map_surrounding_triangle(m, start_loc);
+    int end = Map_surrounding_triangle(m, end_loc);
+
+    if (start == -1 || end == -1) {
+        printf("ERROR, bad path!\n");
+        return;
+    }
+
+    int* open = malloc(sizeof(int) * m->num_tris);
+    for(unsigned int i = 0; i < m->num_tris; i++) {
+        open[i] = 0;
+    }
+    open[start] = 1;
+    int num_open = 1;
+
+    int* came_from = malloc(sizeof(int) * m->num_tris);
+    for (unsigned int i = 0; i < m->num_tris; i++) {
+        came_from[i] = -1;
+    }
+
+    float* f_score = malloc(sizeof(float) * m->num_tris);
+    for (unsigned int i = 0; i < m->num_tris; i++) {
+        f_score[i] = INFINITY;
+    }
+    f_score[start] = 0;
+
+    float* g_score = malloc(sizeof(float) * m->num_tris);
+    for (unsigned int i = 0; i < m->num_tris; i++) {
+        g_score[i] = INFINITY;
+    }
+    g_score[start] = Vec2_length(Vec2_minus(end_loc, start_loc));
+
+    while(num_open > 0) {
+        int current = -1;
+        for (unsigned int i = 0; i < m->num_tris; i++) {
+            if (!open[i]) continue;
+
+            if (current < 0) {
+                current = i;
+            }
+            else if (f_score[i] < f_score[current]) {
+                current = i;
+            }
+        }
+
+        if (current == end) {
+            while (came_from[current] > 0) {
+                printf("%d\n", current);
+                current = came_from[current];
+            }
+            //reconstruct path
+            break;
+        }
+
+        open[current] = 0;
+        for (int n = 0; n < 3; n++) {
+            int neighbor = m->nodes[current].neighbors[n];
+            if (neighbor < 0) continue;
+
+            float tentative_g_score = g_score[current] + Vec2_length(Vec2_minus(m->tris[current].center, m->tris[neighbor].center));
+            if (tentative_g_score < g_score[neighbor]) {
+                came_from[neighbor] = current;
+                g_score[neighbor] = tentative_g_score;
+                f_score[neighbor] = tentative_g_score + Vec2_length(Vec2_minus(end_loc, m->tris[neighbor].center));
+                    
+                open[neighbor] = 1;
+            }
+        }
+    }
+
+    free(open);
+    free(came_from);
+    free(f_score);
+    free(g_score);
 }
 
 void AutoPather_update(AutoPather* a, Entity* e, float delta) {
