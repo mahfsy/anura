@@ -20,7 +20,7 @@ void VelocitySystem_update(float delta) {
         Transform* t = Entity_get_component(query->handles[i], TRANSFORM);
         Velocity* v = Entity_get_component(query->handles[i], VELOCITY);
 
-        t->transform = Mat3_translated(t->transform, Vec2_mul(v->velocity, delta));
+        t->transform = Mat3_translated(t->transform, v->velocity);
     }
 
     Entity_return_query(query_handle);

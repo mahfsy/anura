@@ -5,6 +5,8 @@
 #include <game/components/Transform.h>
 #include <game/components/Velocity.h>
 #include <game/components/AutoPather.h>
+#include <game/Commands.h>
+#include <game/commands/AutoPatherMoveCommand.h>
 
 int main() {
     EntityHandle handle = Entity_new();
@@ -17,12 +19,23 @@ int main() {
 
     Velocity* v = Entity_get_component(handle, VELOCITY);
     v->speed = 1.0;
-    v->velocity = Vec2_normalized((Vec2) {1.0f, 1.0f} );
+    //v->velocity = Vec2_normalized((Vec2) {1.0f, 1.0f} );
+    Command_init_defaults();
+    {
+        int cmd_index = Command_new(AUTO_PATHER_MOVE_COMMAND);
+        AutoPatherMoveCommand* c = Command_get(AUTO_PATHER_MOVE_COMMAND, cmd_index);
+        c->auto_pather_index = Entity_get_component_index(handle, AUTO_PATHER);
+        c->start = (Vec2) { 0.0f, 0.0f };
+        c->end = (Vec2) { 20.0f, 5.0f };
+        Command_issue(AUTO_PATHER_MOVE_COMMAND, cmd_index);
+    }
 
     World_init_systems();
     World_start();
     while (1) {
-        World_update(0.000001);
+        World_update(0.00001f);
+        printf("=====\n");
         Mat3_print(t->transform);
+        Vec2_print(v->velocity);
     }
 }

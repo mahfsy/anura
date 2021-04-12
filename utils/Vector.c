@@ -42,10 +42,13 @@ void Vector_set(Vector* v, unsigned int index, void* new_item) {
         printf("Error: vector index out of bounds: %d out of %d allocated\n", index, v->total_items_allocated);
         return;
     }
-    if (index > v->num_items) {
+    if (index >= v->num_items) {
         v->num_items = index + 1;
     }
     v->index_is_used[index] = 1;
+    if (index == v->_earliest_open_slot) {
+        v->_earliest_open_slot = index + 1;
+    }
     memcpy(v->data + (index * v->_bytes_per_item), new_item, v->_bytes_per_item);
 }
 

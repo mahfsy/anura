@@ -10,11 +10,10 @@ typedef struct {
 } System;
 
 void World_init_systems();
+void World_register_system(System s);
 
 void World_start();
 void World_update(float delta);
-
-void World_register_system(System s);
 
 int World_register_data(void* data);
 void* World_get_data(int index);

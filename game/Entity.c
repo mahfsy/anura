@@ -76,6 +76,13 @@ void* Entity_get_component(EntityHandle handle, ComponentType type) {
     return Component_get(type, e->components[type]);
 }
 
+int Entity_get_component_index(EntityHandle handle, ComponentType type) {
+    Entity* e = dereference_handle(handle);
+    if (!e) return -1;
+
+    return e->components[type];
+}
+
 static Vector queries;
 static bool queries_initialized = false;
 

@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 #include <game/systems/VelocitySystem.h>
+#include <game/systems/AutoPatherSystem.h>
+#include <game/systems/AutoPatherSystem.h>
 
 static Vector data;
 static bool data_initialized = false;
@@ -13,6 +15,7 @@ static bool systems_initialized = false;
 
 void World_init_systems() {
     World_register_system((System) {VelocitySystem_start, VelocitySystem_update});
+    World_register_system((System) {AutoPatherSystem_start, AutoPatherSystem_update});
 }
 
 void World_start() {
@@ -37,9 +40,7 @@ void World_register_system(System s) {
     //check if system is already there?
     
     int index = Vector_new_at_earliest(&systems);
-    printf("%p, %p\n", s.start_func, s.update_func);
     Vector_set(&systems, index, &s);
-    printf("registered: %d\n", systems.num_items);
 }
 
 int World_register_data(void* item) {

@@ -29,6 +29,7 @@ void Entity_add_component(EntityHandle handle, ComponentType type);
 void Entity_remove_component(EntityHandle handle, ComponentType type);
 
 void* Entity_get_component(EntityHandle handle, ComponentType type);
+int Entity_get_component_index(EntityHandle handle, ComponentType type);
 
 EntityQueryHandle Entity_query(int num, ...); 
 EntityQuery* Entity_get_query(EntityQueryHandle handle);
