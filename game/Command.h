@@ -1,20 +1,22 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
+#include <math/Vec2.h>
+
 enum {
-    MOVE_PLAYER,
-}
+    SET_PATH,
+};
 
 typedef struct {
     int type;
     //time?
     union {
         struct {
-            player_idx;
+            unsigned int pather_idx;
             Vec2 start;
             Vec2 end;
-        } move_player_command;
-    }
+        } set_path_command;
+    };
 } Command;
 
 #endif

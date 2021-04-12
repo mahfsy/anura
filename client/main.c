@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <math/AnuraMath.h>
-#include <lib/Entity.h>
-#include <lib/Player.h>
+#include <game/Map.h>
+//#include <lib/Entity.h>
+//#include <lib/Player.h>
+#include <game/Entity.h>
 
 #include <SDL2/SDL.h>
 
@@ -37,10 +39,12 @@ int main() {
     Map_load(&m, "navmesh.obj");
     //Map_print(&m);
 
+    /*
     Player p;
     Player_init(&p);
 
     AutoPather_gen_path(&p.auto_pather, &m, (Vec2) {0.0f, 0.0f}, (Vec2){4.0f, 3.0f});
+    */
 
     SDL_Renderer* renderer = SDL_GetRenderer(window);
     unsigned int last_time = 0, current_time;
@@ -64,7 +68,7 @@ int main() {
         }
 
         //updating
-        Player_update(&p, dt);
+        //Player_update(&p, dt);
 
         //rendering
         

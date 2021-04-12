@@ -4,9 +4,10 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#include <math.h>
+#include <utils/Vector.h>
 
-#define DISTANCE_TOLERANCE 0.1
+static Vector auto_pathers;
+static int initialized = 0;
 
 void AutoPather_init(AutoPather* a) {
     a->path.points = NULL;
@@ -14,6 +15,27 @@ void AutoPather_init(AutoPather* a) {
     a->next_point = 0;
 }
 
+int AutoPather_new() {
+    if (!initialized) {
+        Vector_init(&auto_pathers, sizeof(AutoPather));
+        initialized = 1;
+    }
+
+    int earliest = Vector_new_at_earliest(&auto_pathers);
+    AutoPather* a = Vector_get(&auto_pathers, earliest);
+    AutoPather_init(a);
+    return earliest;
+}
+
+void* AutoPather_get(int index) {
+    return Vector_get(&auto_pathers, index);
+}
+
+void AutoPather_remove(int index) {
+    Vector_remove(&auto_pathers, index);
+}
+
+/*
 static void straight_path(AutoPather* a, Vec2 start, Vec2 end) {
     (void)(start);
     a->path.points = malloc(sizeof(Vec2) * 1);
@@ -135,3 +157,4 @@ void AutoPather_update(AutoPather* a, Entity* e, float delta) {
         diff_direction, Vec2_rotated(diff_direction, -M_PI / 2.0f)
     });
 }
+*/

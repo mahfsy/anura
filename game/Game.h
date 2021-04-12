@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Map.h"
 
+/*
 typedef struct {
     Player* players;
     int num_players;
@@ -14,5 +15,6 @@ typedef struct {
 } Game;
 
 void Game_issue_command(Game* g, Command* c);
+*/
 
 #endif
