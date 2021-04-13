@@ -42,7 +42,7 @@ void AutoPather_update(AutoPather* a, Transform* t, Velocity* v, float delta) {
 
     Vec2 diff_direction = Vec2_mul(diff, 1.0f / diff_length);
 
-    v->velocity = Vec2_mul(diff_direction, distance_to_travel);
+    v->velocity = Vec2_mul(diff_direction, distance_to_travel / delta);
     t->transform = Mat3_with_basis(t->transform, (Mat2) {
         diff_direction, Vec2_rotated(diff_direction, -M_PI / 2.0f)
     });

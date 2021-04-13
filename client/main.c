@@ -4,55 +4,52 @@
 //#include <lib/Entity.h>
 //#include <lib/Player.h>
 #include <game/Entity.h>
+#include <game/World.h>
 
 #include <SDL2/SDL.h>
 
+#include "graphics/Window.h"
+#include "graphics/Shader.h"
+#include "graphics/Mesh.h"
+#include <glad/glad.h>
+
 int main() {
-    //SDL stuff
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        printf("Failed to init SDL2\n");
-        return -1;
+    Window window;
+    Window_init(&window, "anura", 640, 480);
+
+    Shader vertex = Shader_load(GL_VERTEX_SHADER, "assets/shaders/vertex.glsl");
+    Shader fragment = Shader_load(GL_FRAGMENT_SHADER, "assets/shaders/fragment.glsl");
+    Shader shaders[] = {
+        vertex, fragment,
+    };
+    ShaderProgram program = Shaders_link(shaders, 2);
+    if (!program.is_valid || !vertex.is_valid || !fragment.is_valid) {
+        printf("Error loading shaders...\n");
+        return 1;
     }
 
-    SDL_Window* window = SDL_CreateWindow("anura",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            680, 480,
-            0);
+    Mesh triangle;
+    Mesh_init_test_triangle(&triangle);
+    
+    World_init_systems();
+    World_start();
 
-    if (!window) {
-        printf("Error creating window!\n");
-        return -1;
-    }
+    Mat4 projection = Mat4_perspective(90.0f, (float) (window.width) / (float) window.height, 0.01, 100.0f);
+    Mat4 view = Mat4_lookat((Vec3) {0.0f, 0.0f, -5.0f} , (Vec3) {0.0f, 1.0f, 0.0f}, (Vec3) {0.0f, 0.0f, 0.0f});
+    Mat4 model = Mat4_identity();
 
-    SDL_Surface *window_surface = SDL_GetWindowSurface(window);
+    Mat4_print(Mat4_mul(view, projection));
+    Vec3_print(Mat4_transform(Mat4_mul(view, projection), (Vec3) {-0.5f, -0.5f, 0.0f}));
+    Vec3_print(Mat4_transform(view, (Vec3) {-0.5f, -0.5f, 0.0f}));
 
-    if(!window_surface)
-    {
-        printf("Failed to get the surface from the window\n");
-        return -1;
-    }
-    SDL_UpdateWindowSurface(window);
-    //end SDL
-
-    Map m;
-    Map_load(&m, "navmesh.obj");
-    //Map_print(&m);
-
-    /*
-    Player p;
-    Player_init(&p);
-
-    AutoPather_gen_path(&p.auto_pather, &m, (Vec2) {0.0f, 0.0f}, (Vec2){4.0f, 3.0f});
-    */
-
-    SDL_Renderer* renderer = SDL_GetRenderer(window);
+    float elapsed_time = 0.0f;
     unsigned int last_time = 0, current_time;
     int running = 1;
     while (running) {
         current_time = SDL_GetTicks();
         float dt = (current_time - last_time) / 1000.0f;
         last_time = current_time;
+        elapsed_time += dt;
 
         //polling events
         SDL_Event e;
@@ -67,29 +64,21 @@ int main() {
 
         }
 
-        //updating
-        //Player_update(&p, dt);
+        World_update(dt);
 
         //rendering
-        
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_Rect rect;
-        rect.x = 10;
-        rect.y = 50;
-        rect.w = 100;
-        rect.h = 100;
-        SDL_RenderFillRect(renderer, &rect);
+        glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        SDL_RenderPresent(renderer);
+        model = Mat4_rotate_around_y(elapsed_time);
+
+        Shader_uniform_matrix_4fv(&program, "projection", &projection);
+        Shader_uniform_matrix_4fv(&program, "view", &view);
+        Shader_uniform_matrix_4fv(&program, "model", &model);
+        Mesh_draw(&triangle, &program);
+
+        SDL_GL_SwapWindow(window.window);
     }
 
-    if (window) {
-        SDL_DestroyWindow(window);
-    }
-
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
-    }
-
-    Map_delete(&m);
+    Window_delete(&window);
 }

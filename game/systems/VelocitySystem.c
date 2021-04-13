@@ -8,7 +8,6 @@
 #include <game/Components.h>
 
 void VelocitySystem_start() {
-    printf("Starting velocity system!\n");
     return;
 }
 
@@ -20,7 +19,7 @@ void VelocitySystem_update(float delta) {
         Transform* t = Entity_get_component(query->handles[i], TRANSFORM);
         Velocity* v = Entity_get_component(query->handles[i], VELOCITY);
 
-        t->transform = Mat3_translated(t->transform, v->velocity);
+        t->transform = Mat3_translated(t->transform, Vec2_mul(v->velocity, delta));
     }
 
     Entity_return_query(query_handle);
