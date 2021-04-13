@@ -19,6 +19,7 @@ float Vec3_get_index(Vec3* v, int i);
 void  Vec3_set_index(Vec3* v, int i, float s);
 
 Vec3 Vec3_normalized(Vec3 v);
+Vec3 Vec3_cross(Vec3 a, Vec3 b); // A x B
 //Vec3 Vec3_rotated(Vec3 v, float theta);
 
 Vec3 Vec3_plus(Vec3 v, Vec3 w);

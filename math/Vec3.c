@@ -53,6 +53,14 @@ Vec3 Vec3_normalized(Vec3 v) {
     return Vec3_mul(v, 1.0f / Vec3_length(v));
 }
 
+Vec3 Vec3_cross(Vec3 a, Vec3 b) {
+    return (Vec3) {
+        a.y*b.z - a.z*b.y,
+        a.x*b.z - a.z*b.x,
+        a.x*b.y - a.y*b.x,
+    };
+}
+
 Vec3 Vec3_plus(Vec3 v, Vec3 w) {
     return (Vec3) {v.x + w.x, v.y + w.y, v.z + w.z};
 }

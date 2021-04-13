@@ -49,7 +49,7 @@ Mat3 Mat3_scale(Mat3 m, float s) {
     return (Mat3) {
         Vec3_mul(m.x, s),
         Vec3_mul(m.y, s),
-        Vec3_mul(m.y, s),
+        Vec3_mul(m.z, s),
     };
 }
 
