@@ -35,6 +35,8 @@ void Window_init(Window* w, const char* name, int width, int height) {
     gladLoadGLLoader(SDL_GL_GetProcAddress);
 
     SDL_GL_SetSwapInterval(0);
+
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Window_delete(Window* w) {

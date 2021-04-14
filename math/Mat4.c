@@ -107,9 +107,7 @@ Mat3 Mat4_basis(Mat4 m) {
 }
 
 Vec3 Mat4_origin(Mat4 m) {
-    return (Vec3) {
-        m.w.x, m.w.y, m.w.z
-    };
+    return Mat4_transform(m, Vec3_zero());
 }
 
 Vec3 Mat4_transform(Mat4 m, Vec3 v) {
@@ -128,6 +126,15 @@ Mat4 Mat4_identity() {
     };
 }
 
+Mat4 Mat4_remove_translation(Mat4 m) {
+    return (Mat4) {
+        m.x,
+        m.y,
+        m.z,
+        (Vec4) {0.0f, 0.0f, 0.0f, 1.0f},
+    };
+}
+
 Mat4 Mat4_with_basis(Mat4 m, Mat3 basis) {
     return (Mat4) {
         Vec4_from_Vec3(basis.x, m.x.w),
@@ -142,22 +149,17 @@ Mat4 Mat4_with_origin(Mat4 m, Vec3 origin) {
         m.x,
         m.y,
         m.z,
-        Vec4_from_Vec3(origin, m.z.z),
-    };
-}
-
-Mat4 Mat4_with_basis_origin(Mat3 basis, Vec3 origin) {
-    return (Mat4) {
-        Vec4_from_Vec3(basis.x, 0.0f),
-        Vec4_from_Vec3(basis.y, 0.0f),
-        Vec4_from_Vec3(basis.z, 0.0f),
         Vec4_from_Vec3(origin, 1.0f),
     };
 }
 
-Mat4 Mat4_rotate_around_x(float theta) {
-    
+Mat4 Mat4_with_basis_origin(Mat3 basis, Vec3 origin) {
+    Mat4 rotation = Mat4_from_basis(basis);
+    Mat4 translation = Mat4_translate(origin);
+    return Mat4_mul(rotation, translation);
 }
+
+Mat4 Mat4_rotate_around_x(float theta);
 
 Mat4 Mat4_rotate_around_y(float theta) {
     float c = cos(theta);
@@ -178,6 +180,24 @@ Mat4 Mat4_rotated(Mat4 m, float theta) {
     return Mat4_with_basis(m, Mat2_rotated(Mat4_basis(m), theta));
 }
 */
+
+Mat4 Mat4_translate(Vec3 delta) {
+    return (Mat4) {
+        {1.0f, 0.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f, 0.0f},
+        Vec4_from_Vec3(delta, 1.0f),
+    };
+}
+
+Mat4 Mat4_from_basis(Mat3 basis) {
+    return (Mat4) {
+        Vec4_from_Vec3(basis.x, 0.0f),
+        Vec4_from_Vec3(basis.y, 0.0f),
+        Vec4_from_Vec3(basis.z, 0.0f),
+        {0.0f, 0.0f, 0.0f, 1.0f},
+    };
+}
 
 Mat4 Mat4_translated(Mat4 m, Vec3 delta) {
     return Mat4_with_origin(m, Vec3_plus(Mat4_origin(m), delta));
@@ -203,16 +223,20 @@ Mat4 Mat4_perspective(float fov, float aspect_ratio, float near, float far) {
     };
 }
 
-Mat4 Mat4_lookat(Vec3 camera_location, Vec3 camera_up, Vec3 looking_at_location) {
-    Vec3 camera_to_look = Vec3_normalized(Vec3_minus(looking_at_location, camera_location));
-    Vec3 right = Vec3_cross(camera_to_look, camera_up);
+Mat4 Mat4_lookat(Vec3 camera_location, Vec3 camera_up_dir, Vec3 looking_at_location) {
+    Vec3 forward = Vec3_normalized(Vec3_minus(looking_at_location, camera_location));
+    Vec3 right = Vec3_normalized(Vec3_cross(forward, camera_up_dir));
+    Vec3 up = Vec3_cross(right, forward);
     Mat3 new_basis = (Mat3) {
         right,
-        camera_up,
-        Vec3_mul(camera_to_look, -1.0f),
+        up,
+        Vec3_mul(forward, -1.0f),
     };
 
-    return Mat4_with_basis_origin(new_basis, camera_location);
+    Mat4 rotation = Mat4_from_basis(Mat3_transpose(new_basis));
+    //Vec4 translate = Mat4_apply(rotation, Vec4_from_Vec3(Vec3_mul(camera_location, -1.0f), 1.0f));
+    Mat4 translation = Mat4_translate(Vec3_mul(camera_location, -1.0f));
+    return Mat4_mul(rotation, translation);
 }
 
 void Mat4_print(Mat4 m) {

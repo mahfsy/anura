@@ -22,13 +22,14 @@ Vec4 Mat4_row(Mat4 m, int r);
 Mat4 Mat4_transpose(Mat4 m);
 Mat4 Mat4_mul(Mat4 m, Mat4 u);
 Vec4 Mat4_apply(Mat4 m, Vec4 v);
+Vec3 Mat4_transform(Mat4 m, Vec3 v);
 
 Mat3 Mat4_basis(Mat4 m);
 Vec3 Mat4_origin(Mat4 m);
-Vec3 Mat4_transform(Mat4 m, Vec3 v);
 
 Mat4 Mat4_identity();
 
+Mat4 Mat4_remove_translation(Mat4 m);
 Mat4 Mat4_with_basis(Mat4 m, Mat3 basis);
 Mat4 Mat4_with_origin(Mat4 m, Vec3 origin);
 Mat4 Mat4_with_basis_origin(Mat3 basis, Vec3 origin);
@@ -38,6 +39,9 @@ Mat4 Mat4_rotate_around_y(float theta);
 Mat4 Mat4_rotate_around_z(float theta);
 
 Mat4 Mat4_rotate_around(Vec3 axis, float theta);
+
+Mat4 Mat4_translate(Vec3 delta);
+Mat4 Mat4_from_basis(Mat3 basis);
 
 Mat4 Mat4_rotated(Mat4 m, Vec3 axis, float theta);
 Mat4 Mat4_translated(Mat4 m, Vec3 delta);

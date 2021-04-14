@@ -1,5 +1,5 @@
 GAME_LIBS=-lm
-CLIENT_LIBS=-lSDL2 -ldl -lGL 
+CLIENT_LIBS=-lSDL2 -ldl -lGL -lSDL2_image
 
 GAME_INCLUDES=-I./
 CLIENT_INCLUDES=-I./glad/include

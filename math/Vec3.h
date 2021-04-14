@@ -10,6 +10,9 @@ typedef struct {
 } Vec3;
 
 Vec3 Vec3_zero();
+Vec3 Vec3_x();
+Vec3 Vec3_y();
+Vec3 Vec3_z();
 Vec3 Vec3_from_Vec2(Vec2 v, float f);
 
 float Vec3_dot(Vec3 v, Vec3 w);

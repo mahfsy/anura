@@ -87,7 +87,7 @@ ShaderProgram Shaders_link(Shader* shaders, int num) {
     return ret;
 }
 
-void Shader_uniform_matrix_4fv(ShaderProgram* program, const char* name, Mat4* mat) {
+void Shader_uniform_Mat4(ShaderProgram* program, const char* name, Mat4* mat) {
     unsigned int location = glGetUniformLocation(program->program_handle, name);
     glUniformMatrix4fv(location, 1, GL_FALSE, (float*) mat);
 }

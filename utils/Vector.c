@@ -47,7 +47,12 @@ void Vector_set(Vector* v, unsigned int index, void* new_item) {
     }
     v->index_is_used[index] = 1;
     if (index == v->_earliest_open_slot) {
-        v->_earliest_open_slot = index + 1;
+        for(unsigned int i = index + 1; i < v->total_items_allocated; v++) {
+            if (!v->index_is_used[i]) {
+                v->_earliest_open_slot = i;
+                break;
+            }
+        }
     }
     memcpy(v->data + (index * v->_bytes_per_item), new_item, v->_bytes_per_item);
 }
@@ -103,7 +108,6 @@ void Vector_push(Vector* v, void* new_item) {
     }
 
     Vector_set(v, v->num_items, new_item);
-    v->num_items++;
 }
 
 void* Vector_top(Vector* v) {

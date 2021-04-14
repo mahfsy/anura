@@ -7,6 +7,18 @@ Vec3 Vec3_zero() {
     return (Vec3) { 0.0f, 0.0f, 0.0f };
 }
 
+Vec3 Vec3_x() {
+    return (Vec3) { 1.0f, 0.0f, 0.0f };
+}
+
+Vec3 Vec3_y() {
+    return (Vec3) { 0.0f, 1.0f, 0.0f };
+}
+
+Vec3 Vec3_z() { 
+    return (Vec3) { 0.0f, 0.0f, 1.0f };
+}
+
 Vec3 Vec3_from_Vec2(Vec2 v, float f) {
     return (Vec3) {v.x, v.y, f };
 }
@@ -56,7 +68,7 @@ Vec3 Vec3_normalized(Vec3 v) {
 Vec3 Vec3_cross(Vec3 a, Vec3 b) {
     return (Vec3) {
         a.y*b.z - a.z*b.y,
-        a.x*b.z - a.z*b.x,
+        a.z*b.x - a.x*b.z,
         a.x*b.y - a.y*b.x,
     };
 }

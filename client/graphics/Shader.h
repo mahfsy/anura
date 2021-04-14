@@ -20,6 +20,6 @@ typedef struct {
 Shader Shader_load(unsigned int shader_type, const char* file);
 ShaderProgram Shaders_link(Shader* shaders, int num);
 
-void Shader_uniform_matrix_4fv(ShaderProgram* program, const char* name, Mat4* mat);
+void Shader_uniform_Mat4(ShaderProgram* program, const char* name, Mat4* mat);
 
 #endif
