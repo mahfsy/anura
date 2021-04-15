@@ -16,7 +16,7 @@ typedef struct {
 
 void Vector_init(Vector* v, unsigned int bytes_per_item);
 void Vector_resize(Vector* v, unsigned int new_total_items);
-
+void Vector_use_all(Vector* v);
 
 //use it like an array if u please
 void* Vector_get(Vector* v, unsigned int index);

@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include <game/commands/AutoPatherMoveCommand.h>
+#include <game/commands/ChampionUseAbilityCommand.h>
 #include <utils/Vector.h>
 
 static Vector commands;

@@ -17,5 +17,6 @@ void World_update(float delta);
 
 int World_register_data(void* data);
 void* World_get_data(int index);
+void World_remove_data(int index);
 
 #endif 

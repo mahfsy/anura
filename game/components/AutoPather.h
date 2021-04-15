@@ -19,8 +19,4 @@ int AutoPather_new();
 void* AutoPather_get(int index);
 void AutoPather_remove(int index);
 
-//void AutoPather_gen_path(AutoPather* a, const Map* m, Vec2 start, Vec2 end);
-
-//void AutoPather_update(AutoPather* a, Velocity* e, float delta);
-
 #endif

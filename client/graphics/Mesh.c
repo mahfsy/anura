@@ -74,7 +74,7 @@ void Mesh_load(Mesh* m, const char* file_name, int texture_handle) {
             for (int i = 0; i < 2; i++) {
                 values[i] = atof(items[i + 1]);
             }
-            Vec2 v = (Vec2) {values[0], values[1]};
+            Vec2 v = (Vec2) {values[0], 1.0f - values[1]};
             Vector_push(&tex_coords, &v);
         }
         else if (!strcmp(items[0], "f")) {
@@ -91,7 +91,8 @@ void Mesh_load(Mesh* m, const char* file_name, int texture_handle) {
                 Vec3* vert = Vector_get(&vertices, vert_index);
                 Vec2* tex = Vector_get(&tex_coords, tex_index);
 
-                Vertex v = (Vertex) {*vert, Vec2_minus((Vec2) {0.0f, 0.0f}, *tex)};
+                //Vertex v = (Vertex) {*vert, Vec2_minus((Vec2) {0.0f, 0.0f}, *tex)};
+                Vertex v = (Vertex) {*vert, *tex};
                 Vector_push(&m->vertices, &v);
             }
         }
@@ -111,8 +112,6 @@ void Mesh_load(Mesh* m, const char* file_name, int texture_handle) {
 
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex) , (void*)sizeof(Vec3));
     glEnableVertexAttribArray(1);  
-
-    //get texture handle
 
     fclose(file);
 }

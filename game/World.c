@@ -56,3 +56,7 @@ int World_register_data(void* item) {
 void* World_get_data(int index) {
     return Vector_get(&data, index);
 }
+
+void World_remove_data(int index) {
+    Vector_remove(&data, index);
+}

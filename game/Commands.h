@@ -2,6 +2,7 @@
 #define COMMAND_H
 
 #include <math/Vec2.h>
+#include "commands/AutoPatherMoveCommand.h"
 
 typedef struct {
     int (*new_func)();
@@ -11,6 +12,7 @@ typedef struct {
 
 enum DefaultCommands {
     AUTO_PATHER_MOVE_COMMAND,
+    CHAMPION_USE_ABILITY,
 };
 
 void Command_init_defaults();

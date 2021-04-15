@@ -5,6 +5,8 @@ typedef enum {
     TRANSFORM,
     VELOCITY,
     AUTO_PATHER,
+    ABILITY_USER,
+    CHAMPION,
     NUM_COMPONENTS,
 } ComponentType;
 

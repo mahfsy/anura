@@ -35,6 +35,8 @@ int Texture_new(const char* file_name) {
     }
 
     glGenTextures(1, &t->handle);  
+
+    //Uint8* flip_pixels = malloc(sizeof(Uint8) * image->w * image->h);
     
     glBindTexture(GL_TEXTURE_2D, t->handle);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);

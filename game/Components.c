@@ -3,6 +3,8 @@
 #include "components/Transform.h"
 #include "components/AutoPather.h"
 #include "components/Velocity.h"
+#include "components/AbilityUser.h"
+#include "components/Champion.h"
 
 #include <stdio.h>
 
@@ -30,6 +32,18 @@ static const Component components[NUM_COMPONENTS]  = {
         AutoPather_new,
         AutoPather_get,
         AutoPather_remove,
+    },
+    //ABILITY_USER,
+    {
+        AbilityUser_new,
+        AbilityUser_get,
+        AbilityUser_remove,
+    },
+    //CHAMPION,
+    {
+        Champion_new,
+        Champion_get,
+        Champion_remove,
     },
 };
 
