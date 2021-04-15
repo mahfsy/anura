@@ -12,7 +12,7 @@ typedef struct {
 
 enum DefaultCommands {
     AUTO_PATHER_MOVE_COMMAND,
-    CHAMPION_USE_ABILITY,
+    ABILITYUSER_USE_ABILITY,
 };
 
 void Command_init_defaults();
